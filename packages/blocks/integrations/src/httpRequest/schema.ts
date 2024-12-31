@@ -64,6 +64,12 @@ const httpRequestOptionsSchemas = {
       webhook: httpRequestSchemas.v6.optional(),
     }),
   ),
+  vbeta: httpRequestOptionsV5Schema.merge(
+    z.object({
+      webhook: httpRequestSchemas.v6.optional(),
+      fireAndForget: z.boolean().optional(),
+    }),
+  ),
 };
 
 const httpBlockV5Schema = blockBaseSchema.merge(
@@ -87,9 +93,18 @@ export const httpBlockSchemas = {
         options: httpRequestOptionsSchemas.v6.optional(),
       }),
     ),
+  vbeta: httpBlockV5Schema
+    .omit({
+      webhookId: true,
+    })
+    .merge(
+      z.object({
+        options: httpRequestOptionsSchemas.vbeta.optional(),
+      }),
+    ),
 };
 
-const httpBlockSchema = z.union([httpBlockSchemas.v5, httpBlockSchemas.v6]);
+const httpBlockSchema = z.union([httpBlockSchemas.v5, httpBlockSchemas.v6,httpBlockSchemas.vbeta]);
 
 export const executableHttpRequestSchema = z.object({
   url: z.string(),
@@ -110,6 +125,7 @@ export type ExecutableHttpRequest = z.infer<typeof executableHttpRequestSchema>;
 export type HttpRequest = z.infer<typeof httpRequestSchema>;
 export type HttpRequestBlock = z.infer<typeof httpBlockSchema>;
 export type HttpRequestBlockV6 = z.infer<typeof httpBlockSchemas.v6>;
+export type HttpRequestBlockVbeta = z.infer<typeof httpBlockSchemas.vbeta>;
 export type ResponseVariableMapping = z.infer<
   typeof responseVariableMappingSchema
 >;

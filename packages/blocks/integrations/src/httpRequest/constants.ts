@@ -1,4 +1,4 @@
-import type { HttpRequestBlockV6 } from "./schema";
+import type { HttpRequestBlockV6, HttpRequestBlockVbeta } from "./schema";
 
 export enum HttpMethod {
   POST = "POST",
@@ -20,7 +20,8 @@ export const defaultHttpRequestBlockOptions = {
   isAdvancedConfig: false,
   isCustomBody: false,
   isExecutedOnClient: false,
-} as const satisfies HttpRequestBlockV6["options"];
+  fireAndForget: true
+} as const satisfies HttpRequestBlockVbeta["options"];
 
 export const defaultTimeout = 10;
 export const maxTimeout = 120;

@@ -3,12 +3,13 @@ import { Stack } from "@chakra-ui/react";
 import type {
   HttpRequest,
   HttpRequestBlock,
+  HttpRequestBlockVbeta,
 } from "@typebot.io/blocks-integrations/httpRequest/schema";
 import React from "react";
 import { HttpRequestAdvancedConfigForm } from "./HttpRequestAdvancedConfigForm";
 
 type Props = {
-  block: HttpRequestBlock;
+  block: HttpRequestBlockVbeta;
   onOptionsChange: (options: HttpRequestBlock["options"]) => void;
 };
 

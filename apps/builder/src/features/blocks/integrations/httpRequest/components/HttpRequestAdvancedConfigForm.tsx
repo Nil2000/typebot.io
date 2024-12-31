@@ -27,6 +27,7 @@ import {
 import type {
   HttpRequest,
   HttpRequestBlock,
+  HttpRequestBlockVbeta,
   KeyValue,
   ResponseVariableMapping,
   VariableForTest,
@@ -42,7 +43,7 @@ import { VariableForTestInputs } from "./VariableForTestInputs";
 type Props = {
   blockId: string;
   httpRequest: HttpRequest | undefined;
-  options: HttpRequestBlock["options"];
+  options: HttpRequestBlockVbeta["options"];
   onHttpRequestChange: (httpRequest: HttpRequest) => void;
   onOptionsChange: (options: HttpRequestBlock["options"]) => void;
 };
@@ -76,7 +77,7 @@ export const HttpRequestAdvancedConfigForm = ({
     onOptionsChange({ ...options, variablesForTest });
 
   const updateResponseVariableMapping = (
-    responseVariableMapping: ResponseVariableMapping[],
+    responseVariableMapping: ResponseVariableMapping[]
   ) => onOptionsChange({ ...options, responseVariableMapping });
 
   const updateAdvancedConfig = (isAdvancedConfig: boolean) =>
@@ -97,9 +98,9 @@ export const HttpRequestAdvancedConfigForm = ({
       typebot.id,
       convertVariablesForTestToVariables(
         options?.variablesForTest ?? [],
-        typebot.variables,
+        typebot.variables
       ),
-      { blockId },
+      { blockId }
     );
     if (error)
       return showToast({ title: error.name, description: error.message });
@@ -111,12 +112,15 @@ export const HttpRequestAdvancedConfigForm = ({
   const updateIsExecutedOnClient = (isExecutedOnClient: boolean) =>
     onOptionsChange({ ...options, isExecutedOnClient });
 
+  const updateIsFireAndForget = (fireAndForget: boolean) =>
+    onOptionsChange({ ...options, fireAndForget });
+
   const ResponseMappingInputs = useMemo(
     () =>
       function Component(props: TableListItemProps<ResponseVariableMapping>) {
         return <DataVariableInputs {...props} dataItems={responseKeys} />;
       },
-    [responseKeys],
+    [responseKeys]
   );
 
   const isCustomBody =
@@ -140,6 +144,15 @@ export const HttpRequestAdvancedConfigForm = ({
             defaultHttpRequestBlockOptions.isExecutedOnClient
           }
           onCheckChange={updateIsExecutedOnClient}
+        />
+        <SwitchWithLabel
+          label="Wait for the response"
+          moreInfoContent="If enabled, the httpRequest will be executed but will not wait for the response."
+          initialValue={
+            options?.fireAndForget ??
+            defaultHttpRequestBlockOptions.fireAndForget
+          }
+          onCheckChange={updateIsFireAndForget}
         />
         <HStack justify="space-between">
           <Text>Method:</Text>
